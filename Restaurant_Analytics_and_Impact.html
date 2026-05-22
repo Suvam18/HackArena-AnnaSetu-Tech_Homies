@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+<script>
+  // Immediate theme application to prevent FOUC
+  (function() {
+    const savedTheme = localStorage.getItem('annaSetuTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.classList.add(savedTheme);
+  })();
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&amp;family=Nunito+Sans:ital,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "secondary": "#6b6358",
+                  "on-surface": "#2e3230",
+                  "surface": "#faf6f0",
+                  "background": "#faf6f0",
+                  "primary": "#4a7c59",
+                  "dark-bg": "#0a0c16",
+                  "dark-surface": "#161b33"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.5rem",
+                  "lg": "1rem",
+                  "xl": "1.5rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Literata"],
+                  "body": ["Nunito Sans"],
+                  "label": ["Nunito Sans"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Nunito Sans', sans-serif; background-color: #faf6f0; transition: background-color 0.3s ease; }
+    .dark body { background-color: #0a0c16; color: #f1f5f9; }
+    .headline-font { font-family: 'Literata', serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    @keyframes rotateLoop { 100% { transform: rotate(360deg); } }
+</style>
+
+
+
+  </style>
+</head>
+<body id="annasetu-body" class="bg-surface text-on-surface antialiased pb-24 lg:pb-0" style=" padding-top: 7rem;">
+
+<!-- ═══════════════ MOBILE BOTTOM NAV ═══════════════ -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#121629]/95 backdrop-blur-xl border-t border-gray-200/80 dark:border-white/10 z-[2147483647] flex justify-between items-center px-2 py-2 pb-5 shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
+  <a href="Restaurant_Portal_Dashboard.html" class="flex flex-col items-center gap-1 text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#4a7c59] flex-1 transition-colors">
+    <span class="material-symbols-outlined text-[24px]">dashboard</span>
+    <span>Dashboard</span>
+  </a>
+  <a href="Excess_Notification_Center.html" class="flex flex-col items-center gap-1 text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#4a7c59] flex-1 transition-colors">
+    <span class="material-symbols-outlined text-[24px]">inventory_2</span>
+    <span>Surplus</span>
+  </a>
+  <a href="Restaurant_Locations_Management.html" class="flex flex-col items-center gap-1 text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#4a7c59] flex-1 transition-colors">
+    <span class="material-symbols-outlined text-[24px]">location_on</span>
+    <span>Locations</span>
+  </a>
+  <a href="Restaurant_Analytics_and_Impact.html" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#4a7c59] flex-1">
+    <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+    <span>Analytics</span>
+  </a>
+  <a href="Restaurant_Team_Management.html" class="flex flex-col items-center gap-1 text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#4a7c59] flex-1 transition-colors">
+    <span class="material-symbols-outlined text-[24px]">group</span>
+    <span>Team</span>
+  </a>
+</nav>
+<!-- SideNavBar -->
+<!-- TopAppBar -->
+<div class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 flex justify-center">
+<header class="w-full flex justify-between items-center px-6 md:px-8 py-3.5 bg-white/95 dark:bg-[#121629]/95 backdrop-blur-xl border border-gray-200/80 dark:border-white/10 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-300">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#4a7c59] dark:text-indigo-400 text-3xl">soup_kitchen</span>
+<span class="text-xl font-bold font-['Literata'] text-gray-900 dark:text-white">AnnaSetu</span>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-[#facc15] hover:-translate-y-0.5 transition-all duration-300" href="Restaurant_Portal_Dashboard.html">Dashboard</a>
+<a class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-[#facc15] hover:-translate-y-0.5 transition-all duration-300" href="Excess_Notification_Center.html">Surplus Log</a>
+<a class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-[#facc15] hover:-translate-y-0.5 transition-all duration-300" href="Restaurant_Locations_Management.html">Locations</a>
+<a class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-[#facc15] hover:-translate-y-0.5 transition-all duration-300" href="Restaurant_Analytics_and_Impact.html">Analytics</a>
+<a class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-[#facc15] hover:-translate-y-0.5 transition-all duration-300" href="Restaurant_Team_Management.html">Team</a>
+</nav>
+<div class="flex items-center gap-4">
+<a class="flex px-4 md:px-6 py-2 bg-[#facc15] text-[#1e1b4b] rounded-full font-bold text-xs md:text-sm tracking-wide hover:bg-[#fef08a] transition-all duration-300 shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:scale-105" href="index.html">Logout</a>
+<div class="w-10 h-10 rounded-full bg-[#5c6bc0] text-white flex items-center justify-center font-bold cursor-pointer transition-transform hover:scale-110 active:scale-95" id="user-initial">R</div>
+<button class="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#1e243b] flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" id="theme-toggle">
+<span class="material-symbols-outlined text-lg" id="theme-icon">dark_mode</span>
+</button>
+</div>
+</header>
+</div>
+<!-- Main Content -->
+<main class="pt-6 max-w-7xl mx-auto w-full px-4 sm:px-6 py-10 pb-28 md:pb-12 md:py-14">
+<div class="max-w-7xl mx-auto p-2 md:p-8 space-y-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="headline-font text-4xl font-bold text-on-surface mb-2">Analytics Performance</h1>
+<p class="text-secondary text-lg">Reporting period: Oct 1 — Oct 31, 2023</p>
+</div>
+<button id="btn-download" class="flex items-center gap-2 bg-white border border-outline-variant text-primary px-6 py-3 rounded-lg font-bold shadow-sm hover:bg-primary/5 transition-all"><span class="material-symbols-outlined" data-icon="download">download</span>
+          Download Analytics Report</button>
+</div>
+<!-- Hero Metrics (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<div class="md:col-span-2 bg-primary/90 dark:bg-emerald-600/20 dark:backdrop-blur-md p-8 rounded-xl flex flex-col justify-between shadow-lg shadow-primary/10 dark:shadow-emerald-500/10 border border-transparent dark:border-emerald-500/20 overflow-hidden relative group">
+<div class="relative z-10">
+<p class="text-white dark:text-emerald-400 font-medium mb-1">Cumulative Food Saved</p>
+<h3 class="headline-font text-5xl font-black text-white">2,840 <span class="text-2xl font-normal opacity-80">kg</span></h3>
+</div>
+<div class="relative z-10 mt-6 flex items-center gap-2 text-white bg-white/10 dark:bg-white/5 w-fit px-3 py-1 rounded-full text-sm">
+<span class="material-symbols-outlined text-base" data-icon="trending_up">trending_up</span>
+            12% vs last month
+          </div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-white/10 text-[160px] select-none group-hover:scale-110 transition-transform duration-700" data-icon="eco">eco</span>
+</div>
+<div class="md:col-span-2 bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-xl flex flex-col justify-between shadow-sm border border-stone-200/50 dark:border-white/10">
+<div>
+<p class="text-secondary dark:text-stone-400 font-medium mb-1">Estimated CO2 Offset</p>
+<h3 class="headline-font text-5xl font-black text-on-surface dark:text-white">5.2 <span class="text-2xl font-normal text-secondary dark:text-stone-500">tons</span></h3>
+</div>
+<div class="mt-6 flex items-center gap-2 text-primary dark:text-emerald-400 font-bold">
+<span class="material-symbols-outlined" data-icon="forest">forest</span>
+            Equivalent to 84 trees planted
+          </div>
+</div>
+<div class="md:col-span-2 bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-xl flex flex-col justify-between shadow-sm border border-stone-200/50 dark:border-white/10">
+<div>
+<p class="text-stone-700 dark:text-stone-300 font-medium mb-1">Meals Provided</p>
+<h3 class="headline-font text-5xl font-black text-stone-800 dark:text-white">4,730</h3>
+</div>
+<div class="mt-6 flex items-center gap-2 text-stone-500 dark:text-stone-400 text-sm italic">
+            "Your surplus fed 150 families this week"
+          </div>
+</div>
+<div class="md:col-span-3 bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-xl flex flex-col justify-between shadow-sm border border-stone-200/50 dark:border-white/10">
+  <div class="flex items-start justify-between">
+    <div>
+      <p class="text-secondary dark:text-stone-400 font-medium mb-1">Impact: People Served</p>
+      <h3 class="headline-font text-5xl font-black text-on-surface dark:text-white">3,540</h3>
+    </div>
+    <div class="p-3 bg-primary/10 dark:bg-emerald-500/10 rounded-xl">
+      <span class="material-symbols-outlined text-primary dark:text-emerald-400 text-3xl" data-icon="groups">groups</span>
+    </div>
+  </div>
+  <div class="mt-6 flex items-center gap-2 text-primary dark:text-emerald-400 font-bold">
+    <span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+    Empowering local community
+  </div>
+</div>
+<div class="md:col-span-3 bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-xl flex flex-col justify-between shadow-sm border border-stone-200/50 dark:border-white/10 relative overflow-hidden">
+  <div class="relative z-10 flex items-start justify-between">
+    <div>
+      <p class="text-secondary dark:text-stone-400 font-medium mb-1">Avg. Volunteer Response Time</p>
+      <h3 class="headline-font text-5xl font-black text-emerald-600 dark:text-emerald-400">14 <span class="text-2xl font-normal text-emerald-600/70 dark:text-emerald-400/70">mins</span></h3>
+    </div>
+    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl">
+      <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-3xl" data-icon="timer">timer</span>
+    </div>
+  </div>
+  <div class="mt-6 flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold z-10 relative">
+    <span class="material-symbols-outlined text-sm" data-icon="bolt">bolt</span>
+    Faster than 92% of network averages
+  </div>
+</div>
+</div>
+<!-- Detailed Analytics Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+<!-- Surplus Trends Chart -->
+<div class="lg:col-span-2 bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-stone-100 dark:border-white/10">
+<div class="flex justify-between items-center mb-8">
+<h4 class="headline-font text-xl font-bold dark:text-white">Surplus Trends</h4>
+<div class="flex bg-stone-100 dark:bg-white/5 p-1 rounded-lg">
+<button id="btn-trend-daily" class="px-4 py-1.5 text-sm font-bold bg-white dark:bg-white/10 shadow-sm rounded-md text-primary dark:text-emerald-400 transition-all">Daily</button>
+<button id="btn-trend-weekly" class="px-4 py-1.5 text-sm font-medium text-secondary dark:text-stone-400 hover:text-primary dark:hover:text-emerald-400 transition-all">Weekly</button>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 sm:gap-4 px-2" id="trend-chart">
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-primary dark:bg-emerald-600 rounded-t-lg transition-all duration-700 ease-out h-[60%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Mon</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-primary dark:bg-emerald-600 rounded-t-lg transition-all duration-700 ease-out h-[85%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Tue</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-primary dark:bg-emerald-600 rounded-t-lg transition-all duration-700 ease-out h-[45%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Wed</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-primary dark:bg-emerald-600 rounded-t-lg transition-all duration-700 ease-out h-[95%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Thu</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-primary dark:bg-emerald-600 rounded-t-lg transition-all duration-700 ease-out h-[70%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Fri</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-stone-400 dark:bg-stone-700 rounded-t-lg transition-all duration-700 ease-out h-[40%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Sat</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-white/5 rounded-t-lg relative h-48 group-hover:bg-primary/20 dark:group-hover:bg-white/10 transition-colors">
+<div class="trend-bar absolute bottom-0 w-full bg-stone-400 dark:bg-stone-700 rounded-t-lg transition-all duration-700 ease-out h-[25%]"></div>
+</div>
+<span class="trend-label text-xs text-secondary dark:text-stone-500 font-bold text-center">Sun</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-stone-50 dark:border-white/10 flex gap-8">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary dark:bg-emerald-400"></span>
+<span id="trend-avg-1" class="text-sm text-secondary dark:text-stone-400">Weekday Average: 84kg</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-stone-400 dark:bg-stone-700"></span>
+<span id="trend-avg-2" class="text-sm text-secondary dark:text-stone-400">Weekend Average: 32kg</span>
+</div>
+</div>
+</div>
+<!-- Food Category Breakdown -->
+<div class="bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-stone-100 dark:border-white/10 flex flex-col">
+<h4 class="headline-font text-xl font-bold mb-6 dark:text-white">Category Breakdown</h4>
+<div class="space-y-6 flex-1">
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="font-bold text-on-surface dark:text-stone-300">Prepared Meals</span>
+<span class="text-primary dark:text-emerald-400 font-bold">45%</span>
+</div>
+<div class="w-full h-3 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary dark:bg-emerald-600 w-[45%] rounded-full"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="font-bold text-on-surface dark:text-stone-300">Bakery &amp; Grains</span>
+<span class="text-primary dark:text-emerald-400 font-bold">30%</span>
+</div>
+<div class="w-full h-3 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary dark:opacity-70 w-[30%] rounded-full"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="font-bold text-on-surface dark:text-stone-300">Fresh Produce</span>
+<span class="text-primary dark:text-emerald-400 font-bold">18%</span>
+</div>
+<div class="w-full h-3 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-stone-400 dark:bg-stone-500 w-[18%] rounded-full"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="font-bold text-on-surface dark:text-stone-300">Other</span>
+<span class="text-primary dark:text-emerald-400 font-bold">7%</span>
+</div>
+<div class="w-full h-3 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-stone-300 dark:bg-stone-700 w-[7%] rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 p-4 bg-stone-50 dark:bg-white/5 rounded-lg border border-stone-100 dark:border-white/10">
+<p class="text-sm text-secondary dark:text-stone-400 italic">Tip: Optimizing dinner prep batches could reduce Prepared Meal surplus by 10%.</p>
+</div>
+</div>
+</div>
+<!-- Benchmarking & Regional Context -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
+<div class="bg-surface-container p-8 rounded-xl border border-outline-variant/30 relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="headline-font text-xl font-bold mb-4">Sustainability Score</h4>
+<div class="flex items-center gap-6">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-stone-200" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="43.7" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-3xl font-black text-on-surface">88</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary">A Grade</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-on-surface font-bold mb-2">Top 5% in Portland</p>
+<p class="text-secondary text-sm leading-relaxed">Your rescue efficiency is significantly higher than the regional average of 64% for restaurants of your size.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden shadow-lg min-h-[200px] group">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="vibrant farmer market stall with overflowing baskets of colorful organic vegetables and warm sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbivfSS2IgcNEJXUS-dVV1UZ4MYTL2aSaQ1sJn3utRFPs55MZuV7CIn0vDeInEyWlk95xRhCMMvz4QMdUophIjsXmPYX3QVqfME-87acqB33DQ1JcDfqBLo6pN_8TZEMMxDKYpgnShoebOnu1SLox2K2lB8pXsskP50LkkQpkJc2Wn3abLc23QdpsrypEM8Iary3gD6XGFvEb_E49lzX6e1crcgy5I2LFUxd-VHmm0fCx73k7bC02YT7k3zKkaHeFaO3WQorpPMVo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/40 to-transparent p-8 flex flex-col justify-end">
+<h4 class="headline-font text-2xl font-bold text-white mb-2">Grow Together</h4>
+<p class="text-white/80 text-sm mb-4">Invite another partner to the network and offset an additional 500kg of CO2.</p>
+<button class="w-fit bg-tertiary text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-tertiary/90 transition-all">Invite Partner</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- City Ranking / Leaderboard -->
+<!-- City Ranking / Leaderboard -->
+<div class="bg-white dark:bg-white/5 dark:backdrop-blur-md p-8 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-stone-100 dark:border-white/10 flex flex-col md:flex-row gap-8 pb-12 mb-8 relative overflow-hidden">
+  
+  <!-- Left Side: Restaurant's own stats -->
+  <div class="flex-1 flex flex-col justify-center border-r border-stone-100 dark:border-white/10 pr-0 md:pr-8">
+    <h4 class="headline-font text-2xl font-bold mb-2 dark:text-white">City Leaderboard</h4>
+    <p class="text-secondary dark:text-stone-400 text-sm mb-6">Rankings based on total surplus rescued this month across the Portland metro area.</p>
+
+    <div class="bg-stone-50 dark:bg-white/5 p-6 rounded-xl mb-4 flex items-center justify-between border border-stone-100 dark:border-white/5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-secondary dark:text-stone-500 mb-1">Your Rank</p>
+        <p class="text-3xl font-black text-on-surface dark:text-white">#3 <span class="text-sm font-normal text-secondary dark:text-stone-500">of 124</span></p>
+      </div>
+      <span class="material-symbols-outlined text-4xl text-primary dark:text-emerald-400" data-icon="workspace_premium">workspace_premium</span>
+    </div>
+
+    <div class="bg-stone-50 dark:bg-white/5 p-6 rounded-xl flex items-center justify-between border border-stone-100 dark:border-white/5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-secondary dark:text-stone-500 mb-1">Your Rating</p>
+        <p class="text-2xl font-black text-on-surface dark:text-white">4.9 <span class="text-xl text-yellow-500">★★★★★</span></p>
+      </div>
+      <div class="text-right">
+        <p class="text-sm text-secondary dark:text-stone-400 font-bold">120 Reviews</p>
+        <p class="text-xs text-secondary dark:text-stone-500">from Volunteers</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Leaderboard List -->
+  <div class="flex-1 flex flex-col justify-center">
+    <!-- Item 1 -->
+    <div class="flex items-center gap-4 p-4 border-b border-stone-50 dark:border-white/5 hover:bg-stone-50 dark:hover:bg-white/5 rounded-xl transition-colors group">
+      <div class="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 flex items-center justify-center font-bold text-sm">1</div>
+      <div class="flex-1">
+        <p class="font-bold text-on-surface dark:text-white group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors">Green Bites Cafe</p>
+        <p class="text-xs text-secondary dark:text-stone-500">Downtown</p>
+      </div>
+      <div class="text-right">
+        <p class="font-bold text-primary dark:text-emerald-400">3,120 kg</p>
+        <p class="text-[10px] text-secondary dark:text-stone-500 uppercase tracking-wider">Rescued</p>
+      </div>
+    </div>
+    
+    <!-- Item 2 -->
+    <div class="flex items-center gap-4 p-4 border-b border-stone-50 dark:border-white/5 hover:bg-stone-50 dark:hover:bg-white/5 rounded-xl transition-colors group">
+      <div class="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-400 flex items-center justify-center font-bold text-sm">2</div>
+      <div class="flex-1">
+        <p class="font-bold text-on-surface dark:text-white group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors">The Rustic Oven</p>
+        <p class="text-xs text-secondary dark:text-stone-500">Pearl District</p>
+      </div>
+      <div class="text-right">
+        <p class="font-bold text-primary dark:text-emerald-400">2,950 kg</p>
+        <p class="text-[10px] text-secondary dark:text-stone-500 uppercase tracking-wider">Rescued</p>
+      </div>
+    </div>
+    
+    <!-- Item 3 (Current User highlighted) -->
+    <div class="flex items-center gap-4 p-4 bg-primary/5 dark:bg-emerald-500/10 border border-primary/20 dark:border-emerald-500/30 rounded-xl transition-colors group transform md:scale-105 shadow-sm my-2">
+      <div class="w-8 h-8 rounded-full bg-primary dark:bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">3</div>
+      <div class="flex-1">
+        <p class="font-bold text-primary dark:text-emerald-400 flex items-center gap-2">Your Restaurant <span class="material-symbols-outlined text-sm" data-icon="star">star</span></p>
+        <p class="text-xs text-secondary dark:text-stone-500">Current Location</p>
+      </div>
+      <div class="text-right">
+        <p class="font-bold text-primary dark:text-emerald-400">2,840 kg</p>
+        <p class="text-[10px] text-secondary dark:text-stone-500 uppercase tracking-wider">Rescued</p>
+      </div>
+    </div>
+    
+    <!-- Item 4 -->
+    <div class="flex items-center gap-4 p-4 hover:bg-stone-50 dark:hover:bg-white/5 rounded-xl transition-colors group">
+      <div class="w-8 h-8 rounded-full bg-stone-100 dark:bg-white/5 text-stone-500 dark:text-stone-600 flex items-center justify-center font-bold text-sm">4</div>
+      <div class="flex-1">
+        <p class="font-bold text-on-surface dark:text-white group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors">Ocean Breeze Seafood</p>
+        <p class="text-xs text-secondary dark:text-stone-500">NW Portland</p>
+      </div>
+      <div class="text-right">
+        <p class="font-bold text-primary dark:text-emerald-400">2,100 kg</p>
+        <p class="text-[10px] text-secondary dark:text-stone-500 uppercase tracking-wider">Rescued</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</main>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        const syncThemeUI = () => {
+          const isDark = htmlElement.classList.contains('dark');
+          themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+          if (isDark) {
+            htmlElement.style.backgroundColor = '#0a0c16';
+            localStorage.setItem('annaSetuTheme', 'dark');
+          } else {
+            htmlElement.style.backgroundColor = '#faf6f0';
+            localStorage.setItem('annaSetuTheme', 'light');
+          }
+        };
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                htmlElement.classList.toggle('light');
+                syncThemeUI();
+            });
+        }
+        syncThemeUI();
+        
+        // Chart Interactivity
+        const btnDaily = document.getElementById('btn-trend-daily');
+        const btnWeekly = document.getElementById('btn-trend-weekly');
+        const bars = document.querySelectorAll('.trend-bar');
+        const labels = document.querySelectorAll('.trend-label');
+        const avg1 = document.getElementById('trend-avg-1');
+        const avg2 = document.getElementById('trend-avg-2');
+
+        const dataDaily = [60, 85, 45, 95, 70, 40, 25];
+        const dataWeekly = [40, 55, 70, 30, 80, 95, 85];
+
+        const labelsDaily = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const labelsWeekly = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7'];
+
+        function setChartMode(mode) {
+            if (mode === 'daily') {
+                btnDaily.className = "px-4 py-1.5 text-sm font-bold bg-white dark:bg-white/10 shadow-sm rounded-md text-primary dark:text-emerald-400 transition-all";
+                btnWeekly.className = "px-4 py-1.5 text-sm font-medium text-secondary dark:text-stone-400 hover:text-primary transition-all";
+                avg1.textContent = "Weekday Average: 84kg";
+                avg2.textContent = "Weekend Average: 32kg";
+            } else {
+                btnWeekly.className = "px-4 py-1.5 text-sm font-bold bg-white dark:bg-white/10 shadow-sm rounded-md text-primary dark:text-emerald-400 transition-all";
+                btnDaily.className = "px-4 py-1.5 text-sm font-medium text-secondary dark:text-stone-400 hover:text-primary transition-all";
+                avg1.textContent = "Previous Month Avg: 410kg";
+                avg2.textContent = "This Month Current: 380kg";
+            }
+
+            const dataTarget = mode === 'daily' ? dataDaily : dataWeekly;
+            const labelsTarget = mode === 'daily' ? labelsDaily : labelsWeekly;
+
+            bars.forEach((bar, index) => {
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = `${dataTarget[index]}%`;
+                }, 150);
+            });
+
+            labels.forEach((lbl, index) => {
+                lbl.style.opacity = '0';
+                setTimeout(() => {
+                    lbl.textContent = labelsTarget[index];
+                    lbl.style.opacity = '1';
+                }, 150);
+            });
+        }
+
+        if (btnDaily && btnWeekly) {
+            btnDaily.addEventListener('click', () => setChartMode('daily'));
+            btnWeekly.addEventListener('click', () => setChartMode('weekly'));
+        }
+
+        // Feature: Download Analytics Report
+        const downloadBtn = document.getElementById('btn-download');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                const origHtml = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = `<span class="material-symbols-outlined inline-block" style="animation:rotateLoop 1s linear infinite;">sync</span> Downloading...`;
+                downloadBtn.disabled = true;
+
+                setTimeout(() => {
+                    const headers = "Date,Category,Rescued_kg,CO2_Offset_tons\n";
+                    const rows = [
+                        "2023-10-01,Prepared Meals,45,0.08",
+                        "2023-10-02,Fresh Produce,30,0.05",
+                        "2023-10-03,Bakery,25,0.04",
+                        "2023-10-04,Prepared Meals,50,0.09"
+                    ].join("\n");
+                    const csvContent = headers + rows;
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "annasetu_analytics_report.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    downloadBtn.innerHTML = origHtml;
+                    downloadBtn.disabled = false;
+                }, 1200);
+            });
+        }
+    });
+</script>
+
+<!-- AI Support Assistant Integration -->
+<script src="ai_assistant.js?v=4"></script>
+<!-- User Profile Manager Integration -->
+<script src="profile_manager.js"></script>
+
+</body>
+</html>

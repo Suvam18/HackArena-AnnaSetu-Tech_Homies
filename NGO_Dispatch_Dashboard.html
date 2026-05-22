@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NGO Dispatch Dashboard | AnnaSetu</title>
+  <meta name="description" content="Coordinate food rescue operations with AI-powered dispatching."/>
+  <link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;600;700&family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (function(){
+      var s = JSON.parse(localStorage.getItem('annasetu_session')||'null');
+      if(!s||s.role!=='ngo'){ window.location.href='signin.html'; }
+      if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+  <style>
+    :root {
+      --primary:#4a7c59; --primary-dark:#3d664a; --primary-light:#78a886;
+      --bg:#faf6f0; --surface:#ffffff; --surface-tint:#f0ece4;
+      --tertiary:#705c30; --tertiary-light:#c4a66a;
+      --on-bg:#2e3230; --on-surface-var:#4a4e4a;
+      --outline:#74796e; --outline-var:#c4c8bc;
+      --error:#b83230; --success:#3a7d44;
+      --shadow:0 8px 32px rgba(46,50,48,0.08);
+      --radius:24px;
+    }
+
+    html.dark-mode {
+      --bg: #121412;
+      --surface: #1e211e;
+      --surface-tint: #2a2e2a;
+      --on-bg: #e6e8e3;
+      --on-surface-var: #b0b4ac;
+      --outline: #74796e;
+      --outline-var: #424641;
+      --shadow: 0 12px 48px rgba(0,0,0,0.4);
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--on-bg);min-height:100vh;overflow-x:hidden;transition: background 0.3s ease;}
+
+    /* ── Navbar ── */
+    .navbar-container { position: fixed; top: 20px; left: 0; right: 0; z-index: 1000; padding: 0 20px; display: flex; justify-content: center; }
+    .navbar { background: var(--surface); width: 100%; max-width: 1200px; height: 72px; padding: 0 24px; border-radius: 999px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.8); backdrop-filter: blur(12px); }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--on-bg); }
+    .nav-logo .material-symbols-outlined { color:var(--primary); font-size:28px; }
+    .nav-logo .name { font-family:'Literata',serif; font-weight:700; font-size:20px; }
+
+    /* ── Badge Styling ── */
+    .nav-link { position: relative; }
+    .badge {
+      position: absolute; top: 0; right: 4px;
+      background: var(--error); color: #fff;
+      font-size: 10px; font-weight: 800;
+      min-width: 18px; height: 18px;
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--surface);
+      box-shadow: 0 2px 8px rgba(184,50,48,0.3);
+      display: none;
+    }
+    .b-nav-item { position: relative; }
+    .b-badge {
+      position: absolute; top: 2px; right: 25%;
+      background: var(--error); color: #fff;
+      font-size: 9px; font-weight: 800;
+      min-width: 16px; height: 16px;
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--bg);
+      display: none;
+    }
+    .nav-center { display: flex; align-items: center; gap: 8px; }
+    .nav-link { padding: 8px 16px; text-decoration: none; color: var(--on-surface-var); font-size: 14px; font-weight: 600; border-radius: 999px; transition: 0.2s; }
+    .nav-link:hover { color: var(--primary); background: rgba(74,124,89,0.05); }
+    .nav-link.active { color: var(--primary); background: rgba(74,124,89,0.1); font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .logout-btn { background: #ffcc00; color: #2e3230; border: none; padding: 8px 20px; border-radius: 999px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .logout-btn:hover { background: #f0c000; transform: translateY(-1px); }
+    .profile-circle { width: 40px; height: 40px; border-radius: 50%; background: #5c6bc0; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .theme-toggle { cursor: pointer; color: var(--on-surface-var); transition: 0.2s; }
+
+    /* ── Main Content ── */
+    .main { padding: 120px 20px 100px; max-width: 1200px; margin: 0 auto; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+    .page-title { font-family:'Literata',serif; font-weight:700; font-size:32px; }
+    .page-subtitle { font-size:16px; color:var(--on-surface-var); margin-top:4px; }
+
+    /* ── Achievement Slider ── */
+    .achievement-section { margin-bottom: 48px; overflow: hidden; position: relative; padding: 20px 0; }
+    .slider-track { display: flex; gap: 24px; animation: scroll 40s linear infinite; width: max-content; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-300px * 4 - 24px * 4)); } }
+    .achievement-card { width: 300px; height: 180px; border-radius: var(--radius); overflow: hidden; position: relative; box-shadow: var(--shadow); flex-shrink: 0; }
+    .achievement-card img { width: 100%; height: 100%; object-fit: cover; }
+    .achievement-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 16px; color: #fff; }
+    .achievement-text { font-size: 14px; font-weight: 700; font-family: 'Literata', serif; }
+
+    /* ── Stats Grid ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--outline-var); box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .stat-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--surface-tint); display: flex; align-items: center; justify-content: center; color: var(--primary); margin-bottom: 16px; font-size: 24px; }
+    .stat-val { font-size: 32px; font-weight: 800; font-family: 'Literata', serif; }
+    .stat-lab { font-size: 14px; font-weight: 700; color: var(--on-surface-var); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── AI Suggestion Box ── */
+    .ai-suggestion { background: var(--primary); color: #fff; padding: 24px; border-radius: var(--radius); margin-bottom: 32px; display: flex; align-items: center; gap: 24px; box-shadow: 0 12px 32px rgba(74,124,89,0.3); border: none; }
+    .ai-icon { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 32px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+    .ai-content { flex-grow: 1; }
+    .ai-label { font-size: 12px; font-weight: 800; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px; }
+    .ai-text { font-size: 18px; font-weight: 700; font-family: 'Literata', serif; }
+    .ai-btn { background: #fff; color: var(--primary); border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .ai-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    /* ── Content Grid ── */
+    .grid-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 32px; margin-bottom: 32px; }
+    .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--outline-var); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+    .card-header { padding: 24px; border-bottom: 1px solid var(--outline-var); display: flex; justify-content: space-between; align-items: center; }
+    .card-title { font-family: 'Literata', serif; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+    /* ── Alert Feed ── */
+    .alert-list { padding: 0 24px; }
+    .alert-item { display: flex; align-items: center; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--outline-var); }
+    .alert-item.urgent { background: rgba(184,50,48,0.05); margin: 0 -24px; padding: 20px 24px; border-left: 4px solid var(--error); }
+    .alert-info { flex-grow: 1; }
+    .alert-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .alert-name { font-weight: 800; font-size: 16px; }
+    .alert-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+    .tag-urgent { background: var(--error); color: #fff; }
+    .alert-loc { font-size: 13px; color: var(--on-surface-var); display: flex; align-items: center; gap: 4px; }
+    .alert-time { font-size: 13px; font-weight: 700; color: var(--error); }
+    .accept-btn { background: var(--primary); color: #fff; border: none; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .accept-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+    /* ── Realistic Map ── */
+    .map-box { height: 320px; position: relative; background: #e0e6e0; overflow: hidden; }
+    .map-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: grayscale(40%); }
+    .map-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.05) 100%); }
+    .map-marker { position: absolute; transform: translate(-50%, -50%); cursor: pointer; transition: 0.3s; z-index: 10; }
+    .m-pin { width: 32px; height: 32px; background: var(--surface); border: 3px solid var(--primary); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .m-pin .material-symbols-outlined { transform: rotate(45deg); font-size: 18px; color: var(--primary); font-variation-settings: 'FILL' 1; }
+    .m-pin.urgent { border-color: var(--error); }
+    .m-pin.urgent .material-symbols-outlined { color: var(--error); }
+    .map-label { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: var(--on-bg); color: var(--bg); padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; white-space: nowrap; opacity: 0; transition: 0.2s; pointer-events: none; }
+    .map-marker:hover .map-label { opacity: 1; top: -45px; }
+
+    /* ── Analytics Chart ── */
+    .analytics-card { grid-column: 1 / -1; }
+    .chart-container { padding: 24px; min-height: 350px; }
+    .filter-btn-group { display: flex; gap: 8px; }
+    .filter-btn { background: var(--surface-tint); color: var(--on-surface-var); border: 1px solid var(--outline-var); padding: 6px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* ── Mobile Bottom Nav ── */
+    .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border-top: 1px solid var(--outline-var); padding: 10px 16px 20px; z-index: 2000; justify-content: space-between; align-items: center; }
+    html.dark-mode .bottom-nav { background: rgba(30, 33, 30, 0.98); }
+    .b-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--on-surface-var); font-size: 11px; font-weight: 700; flex: 1; transition: 0.2s; }
+    .b-nav-item .material-symbols-outlined { font-size: 24px; }
+    .b-nav-item.active { color: var(--primary); }
+    .b-nav-item.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+
+    @media (max-width: 1024px) {
+      .nav-center { display: none; }
+      .grid-layout { grid-template-columns: 1fr; }
+      .bottom-nav { display: flex; }
+      .main { padding-top: 110px; padding-bottom: 120px; }
+      .navbar { padding: 0 16px; gap: 8px; }
+      .logout-btn { padding: 6px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="bottom-nav">
+  <a href="NGO_Dispatch_Dashboard.html" class="b-nav-item active">
+    <span class="material-symbols-outlined">dashboard</span>
+    <span>Dashboard</span>
+  </a>
+  <a href="NGO_Alert_Management.html" class="b-nav-item">
+    <span class="material-symbols-outlined">notification_important</span>
+    <span>Alerts</span>
+    <span class="b-badge" id="b-alert-badge">0</span>
+  </a>
+  <a href="NGO_Volunteer_Fleet.html" class="b-nav-item">
+    <span class="material-symbols-outlined">local_shipping</span>
+    <span>Volunteer</span>
+  </a>
+  <a href="NGO_Rescue_Coordination.html" class="b-nav-item">
+    <span class="material-symbols-outlined">route</span>
+    <span>Logistics</span>
+  </a>
+  <a href="NGO_Impact_Reporting.html" class="b-nav-item">
+    <span class="material-symbols-outlined">monitoring</span>
+    <span>Impact</span>
+  </a>
+</nav>
+
+<div class="navbar-container">
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="NGO_Dispatch_Dashboard.html" class="nav-logo">
+        <span class="material-symbols-outlined">soup_kitchen</span>
+        <span class="name">AnnaSetu</span>
+      </a>
+    </div>
+    <nav class="nav-center">
+      <a href="NGO_Dispatch_Dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="NGO_Alert_Management.html" class="nav-link">Rescue Alert <span class="badge" id="top-alert-badge">0</span></a>
+      <a href="NGO_Volunteer_Fleet.html" class="nav-link">Volunteer</a>
+      <a href="NGO_Rescue_Coordination.html" class="nav-link">Logistics</a>
+      <a href="NGO_Impact_Reporting.html" class="nav-link">Impact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
+      <div class="profile-circle" id="user-initial">N</div>
+      <div class="theme-toggle" onclick="toggleTheme()" id="theme-btn">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </div>
+    </div>
+  </header>
+</div>
+
+<main class="main">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title" id="greeting-text">Welcome Back!</h1>
+      <p class="page-subtitle">Your rescue network is currently overseeing 5 active alerts.</p>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="logout-btn" style="background:var(--primary); color:#fff;" onclick="window.location.href='NGO_Alert_Management.html'">
+        <span class="material-symbols-outlined" style="font-size:18px;">bolt</span> Quick Dispatch
+      </button>
+    </div>
+  </div>
+
+  <!-- Achievement Moving Slider -->
+  <div class="achievement-section">
+    <div class="slider-track">
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop" alt="Impact 1">
+        <div class="achievement-overlay"><div class="achievement-text">10,000 Meals Rescued in Downtown</div></div>
+      </div>
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" alt="Impact 2">
+        <div class="achievement-overlay"><div class="achievement-text">New Volunteer Record: 50 Members</div></div>
+      </div>
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" alt="Impact 3">
+        <div class="achievement-overlay"><div class="achievement-text">Waste Reduction Award 2025</div></div>
+      </div>
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1931&auto=format&fit=crop" alt="Impact 4">
+        <div class="achievement-overlay"><div class="achievement-text">5 Tons of CO2 Offset Achieved</div></div>
+      </div>
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop" alt="Impact 1">
+        <div class="achievement-overlay"><div class="achievement-text">10,000 Meals Rescued in Downtown</div></div>
+      </div>
+      <div class="achievement-card">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" alt="Impact 2">
+        <div class="achievement-overlay"><div class="achievement-text">New Volunteer Record: 50 Members</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><span class="material-symbols-outlined">notifications_active</span></div>
+      <div class="stat-val">5</div>
+      <div class="stat-lab">Food Requests Nearby</div>
+    </div>
+    <div class="stat-card" style="border-color:var(--error);">
+      <div class="stat-icon" style="color:var(--error);"><span class="material-symbols-outlined">priority_high</span></div>
+      <div class="stat-val" style="color:var(--error);">3</div>
+      <div class="stat-lab">Urgent Expirations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="color:var(--tertiary);"><span class="material-symbols-outlined">local_shipping</span></div>
+      <div class="stat-val">12</div>
+      <div class="stat-lab">Active Dispatches</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="color:var(--success);"><span class="material-symbols-outlined">person_check</span></div>
+      <div class="stat-val">8</div>
+      <div class="stat-lab">Volunteers Online</div>
+    </div>
+  </div>
+
+  <!-- AI Suggestion Box -->
+  <div class="ai-suggestion">
+    <div class="ai-icon"><span class="material-symbols-outlined">smart_toy</span></div>
+    <div class="ai-content">
+      <div class="ai-label">AI Smart Suggestion</div>
+      <div class="ai-text">Best rescue: <b>30 meals</b> from Spice Route, <b>1.2 km</b> away. Expires in <b>40 mins</b>.</div>
+    </div>
+    <button class="ai-btn" onclick="quickAccept('Spice Route', '30 meals')">Quick Accept</button>
+  </div>
+
+  <div class="grid-layout">
+    <!-- Urgent Requests Panel -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="material-symbols-outlined" style="color:var(--error);">error</span> Urgent Alerts</div>
+        <span style="font-size:12px; font-weight:800; color:var(--error);">Requires Immediate Action</span>
+      </div>
+      <div class="alert-list">
+        <div class="alert-item urgent">
+          <div class="alert-info">
+            <div class="alert-head">
+              <span class="alert-name">Artisanal Bakery Mix</span>
+              <span class="alert-tag tag-urgent">Expiring Soon</span>
+            </div>
+            <div class="alert-loc"><span class="material-symbols-outlined" style="font-size:14px;">restaurant</span> The Hearth Bakery · 0.8km</div>
+          </div>
+          <div style="text-align:right; margin-right:16px;">
+            <div class="alert-time">22:15 remaining</div>
+          </div>
+          <button class="accept-btn" onclick="quickAccept('The Hearth Bakery', 'Bakery Mix')">Accept</button>
+        </div>
+        <div class="alert-item">
+          <div class="alert-info">
+            <div class="alert-head">
+              <span class="alert-name">Fresh Bistro Salads</span>
+            </div>
+            <div class="alert-loc"><span class="material-symbols-outlined" style="font-size:14px;">restaurant</span> Garden Bistro · 1.5km</div>
+          </div>
+          <div style="text-align:right; margin-right:16px;">
+            <div style="font-size:13px; color:var(--on-surface-var);">1h 40m left</div>
+          </div>
+          <button class="accept-btn" onclick="quickAccept('Garden Bistro', 'Salads')">Accept</button>
+        </div>
+      </div>
+      <button style="width:100%; padding:14px; background:none; border:none; border-top:1px solid var(--outline-var); color:var(--primary); font-weight:800; cursor:pointer; font-size:13px;" onclick="window.location.href='NGO_Alert_Management.html'">View All 5 Alerts</button>
+    </div>
+
+    <!-- Realistic Nearby Map -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="material-symbols-outlined" style="color:var(--primary);">map</span> Nearby Rescue Network</div>
+      </div>
+      <div class="map-box">
+        <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=2006&auto=format&fit=crop" class="map-bg" alt="Map Base">
+        <div class="map-overlay"></div>
+        <div class="map-marker" style="top:30%; left:40%;">
+          <div class="m-pin urgent"><span class="material-symbols-outlined">restaurant</span></div>
+          <div class="map-label">The Hearth Bakery (Urgent)</div>
+        </div>
+        <div class="map-marker" style="top:60%; left:25%;">
+          <div class="m-pin"><span class="material-symbols-outlined">restaurant</span></div>
+          <div class="map-label">Garden Bistro (1.5km)</div>
+        </div>
+        <div class="map-marker" style="top:45%; left:75%;">
+          <div class="m-pin"><span class="material-symbols-outlined">restaurant</span></div>
+          <div class="map-label">Spice Route (1.2km)</div>
+        </div>
+        <div class="map-marker" style="top:80%; left:60%;">
+          <div class="m-pin" style="background:var(--primary); border-color:#fff;"><span class="material-symbols-outlined" style="color:#fff;">local_shipping</span></div>
+          <div class="map-label">David Chen (Active)</div>
+        </div>
+      </div>
+      <div style="padding:20px; background:var(--surface-tint); font-size:13px; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+        <span>3 Restaurants with Surplus Nearby</span>
+        <button class="accept-btn" style="background:none; color:var(--primary); padding:0;" onclick="alert('Opening Full Integrated Map...')">Open Full Map</button>
+      </div>
+    </div>
+
+    <!-- Rescue Analytics Graph -->
+    <div class="card analytics-card">
+      <div class="card-header">
+        <div class="card-title"><span class="material-symbols-outlined" style="color:var(--primary);">monitoring</span> Rescue Analytics</div>
+        <div class="filter-btn-group">
+          <button class="filter-btn active" onclick="updateChart('day')">Daily</button>
+          <button class="filter-btn" onclick="updateChart('month')">Monthly</button>
+          <button class="filter-btn" onclick="updateChart('year')">Yearly</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="rescueChart"></canvas>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function handleLogout(){ localStorage.removeItem('annasetu_session'); window.location.href='signin.html'; }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    const icon = document.querySelector('#theme-btn .material-symbols-outlined');
+    if(icon) icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    if(rescueChart) {
+      updateChartTheme(isDark);
+    }
+  }
+
+  // Session & Counts
+  const session = JSON.parse(localStorage.getItem('annasetu_session') || '{}');
+  if(session.fname) {
+    document.getElementById('user-initial').textContent = session.fname.charAt(0).toUpperCase();
+    document.getElementById('greeting-text').textContent = `Welcome Back, ${session.fname}!`;
+  }
+  const volCount = JSON.parse(localStorage.getItem('annasetu_volunteers') || '[]').length || 34;
+  const missionCount = JSON.parse(localStorage.getItem('annasetu_active_missions') || '[]').length || 12;
+  document.querySelectorAll('.stat-val')[2].textContent = missionCount;
+  document.querySelectorAll('.stat-val')[3].textContent = volCount;
+  const alertSubtitle = document.querySelector('.page-subtitle');
+  if(alertSubtitle) alertSubtitle.textContent = `Your rescue network is currently overseeing ${missionCount + 2} active alerts.`;
+
+  function updateBadgeUI() {
+    const count = parseInt(localStorage.getItem('annasetu_pending_alert_count') || '0');
+    const topBadge = document.getElementById('top-alert-badge');
+    const bBadge = document.getElementById('b-alert-badge');
+    
+    if(topBadge) {
+      topBadge.textContent = count;
+      topBadge.style.display = count > 0 ? 'flex' : 'none';
+    }
+    if(bBadge) {
+      bBadge.textContent = count;
+      bBadge.style.display = count > 0 ? 'flex' : 'none';
+    }
+  }
+  updateBadgeUI();
+
+  function quickAccept(restaurant, item) {
+    window.location.href = 'NGO_Alert_Management.html';
+  }
+
+  // Chart Logic
+  let rescueChart;
+  const chartData = {
+    day: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: [12, 19, 15, 25, 22, 30, 28] },
+    month: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], data: [450, 520, 480, 610, 590, 720] },
+    year: { labels: ['2021', '2022', '2023', '2024', '2025'], data: [4200, 5800, 7500, 9200, 12500] }
+  };
+
+  function initChart() {
+    const ctx = document.getElementById('rescueChart').getContext('2d');
+    const isDark = document.documentElement.classList.contains('dark-mode');
+    const textColor = isDark ? '#b0b4ac' : '#4a4e4a';
+    
+    rescueChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartData.day.labels,
+        datasets: [{
+          label: 'Total Rescues',
+          data: chartData.day.data,
+          backgroundColor: '#4a7c59',
+          borderRadius: 8,
+          hoverBackgroundColor: '#3d664a'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' },
+            ticks: { color: textColor, font: { weight: 'bold' } }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: textColor, font: { weight: 'bold' } }
+          }
+        }
+      }
+    });
+  }
+
+  function updateChart(type) {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if(btn.textContent.toLowerCase().includes(type)) btn.classList.add('active');
+    });
+
+    rescueChart.data.labels = chartData[type].labels;
+    rescueChart.data.datasets[0].data = chartData[type].data;
+    rescueChart.update();
+  }
+
+  function updateChartTheme(isDark) {
+    const color = isDark ? '#b0b4ac' : '#4a4e4a';
+    const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+    rescueChart.options.scales.x.ticks.color = color;
+    rescueChart.options.scales.y.ticks.color = color;
+    rescueChart.options.scales.y.grid.color = gridColor;
+    rescueChart.update();
+  }
+
+  // Map Marker Interactions
+  document.querySelectorAll('.map-marker').forEach(marker => {
+    marker.onclick = function() {
+      const label = this.querySelector('.map-label').textContent;
+      alert(`Location: ${label}\nStatus: Available for Rescue`);
+    };
+  });
+
+  window.onload = initChart;
+</script>
+  <script src="profile_manager.js"></script>
+  <script src="ai_assistant.js"></script>
+</body>
+</html>
