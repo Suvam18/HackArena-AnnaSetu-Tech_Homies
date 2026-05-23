@@ -64,6 +64,9 @@
             <a class="text-sm text-gray-600 dark:text-gray-300 font-semibold hover:text-emerald-600 dark:hover:text-[#facc15] transition-all hover:-translate-y-0.5 duration-300" href="#stats">
                 Stats
             </a>
+            <a class="text-sm text-gray-600 dark:text-gray-300 font-semibold hover:text-emerald-600 dark:hover:text-[#facc15] transition-all hover:-translate-y-0.5 duration-300" href="#developers">
+                Developers
+            </a>
         </nav>
         <div class="flex items-center gap-2 md:gap-4">
             <!-- Sign In: compact on mobile, full on desktop -->
@@ -591,7 +594,75 @@
             </div>
         </div>
         
-        <!-- Stats bottom haze — fades into footer. Light mode: to footer bg. Dark mode: to footer dark bg -->
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- Developers Section                                -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section id="developers" class="relative w-full py-32 bg-[#fdf8ee] dark:bg-[#0B0F19] overflow-hidden transition-colors duration-500 border-t border-gray-150 dark:border-white/5">
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <p class="text-xs font-black tracking-[0.3em] uppercase text-emerald-600 dark:text-emerald-400 mb-4 scale-animation">Meet the Developers</p>
+                <h2 class="text-5xl md:text-6xl font-black text-gray-900 dark:text-white font-['Literata'] tracking-tighter mb-6">Core Development Team</h2>
+                <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                    The software architects, designers, and systems engineers behind the AnnaSetu network.
+                </p>
+            </div>
+
+            <!-- Team Grid: Exactly 3 Columns on desktop, 1 on mobile -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 px-4">
+                
+                <!-- Developer 1: Suvam Chatterjee -->
+                <div class="group relative bg-white dark:bg-[#161d2e] rounded-[2.5rem] overflow-hidden border border-gray-150 dark:border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 flex flex-col text-center p-8">
+                    <!-- Profile Image Container -->
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-emerald-500/20 dark:border-emerald-500/10 group-hover:border-emerald-500 transition-all duration-500">
+                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]" src="suvam_chatterjee.jpg" alt="Suvam Chatterjee">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                    </div>
+                    <!-- Details -->
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Suvam Chatterjee</h3>
+                    <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-4">Frontend Developer</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-body leading-relaxed">
+                        Crafting highly responsive user interfaces, fluid web animations, and premium visual components.
+                    </p>
+                </div>
+
+                <!-- Developer 2: Arijit Kr. Das -->
+                <div class="group relative bg-white dark:bg-[#161d2e] rounded-[2.5rem] overflow-hidden border border-gray-150 dark:border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 flex flex-col text-center p-8">
+                    <!-- Profile Image Container -->
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-emerald-500/20 dark:border-emerald-500/10 group-hover:border-emerald-500 transition-all duration-500">
+                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]" src="arijit_kr_das.jpg" alt="Arijit Kr. Das">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                    </div>
+                    <!-- Details -->
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Arijit Kr. Das</h3>
+                    <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-4">UI/UX Designer</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-body leading-relaxed">
+                        Designing intuitive layout wireframes, premium style guides, and consistent design aesthetics.
+                    </p>
+                </div>
+
+                <!-- Developer 3: Suraj Samanta -->
+                <div class="group relative bg-white dark:bg-[#161d2e] rounded-[2.5rem] overflow-hidden border border-gray-150 dark:border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 flex flex-col text-center p-8">
+                    <!-- Profile Image Container -->
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-emerald-500/20 dark:border-emerald-500/10 group-hover:border-emerald-500 transition-all duration-500">
+                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]" src="suraj_samanta.jpg" alt="Suraj Samanta">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                    </div>
+                    <!-- Details -->
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Suraj Samanta</h3>
+                    <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-4">FrontEnd and Backend Developer</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-body leading-relaxed">
+                        Spearheading system design, real-time rescue logic, and full-stack API infrastructure.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Developers bottom haze — fades into footer. Light mode: to footer bg. Dark mode: to footer dark bg -->
         <div class="absolute bottom-0 left-0 right-0 h-28 z-10 pointer-events-none dark:hidden"
              style="background: linear-gradient(to bottom, transparent 0%, rgba(244,251,240,0.65) 50%, #f4fbf0 100%);"></div>
         <div class="absolute bottom-0 left-0 right-0 h-28 z-10 pointer-events-none hidden dark:block"
@@ -708,6 +779,7 @@
                     <li><a href="#features" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Features</a></li>
                     <li><a href="#how-it-works" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">How it works</a></li>
                     <li><a href="#stats" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Our Impact</a></li>
+                    <li><a href="#developers" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Developers</a></li>
                     <li><a href="#faq" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Faq</a></li>
                     <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
                     <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Terms of Service</a></li>
