@@ -447,7 +447,7 @@ function renderBranches() {
     });
 }
 
-const CAT_COLORS = { 'Bakery': '#4a7c59', 'Produce': '#3b82f6', 'Prepared Meals': '#fca311', 'Beverages': '#9b5de5', 'Other': '#adb5bd' };
+const CAT_COLORS = { 'Bakery': '#4a7c59', 'Produce': '#3b82f6', 'Veg Meals': '#10b981', 'Non-Veg Meals': '#ef4444', 'Prepared Meals': '#fca311', 'Beverages': '#9b5de5', 'Other': '#adb5bd' };
 
 window.renderTrendChart = function() {
     const range = parseInt(document.getElementById('trend-range').value);
@@ -708,7 +708,7 @@ function updatePickup(id, patch) {
 }
 
 function getFoodEmoji(type) {
-  return {'Bakery':'🥖','Produce':'🥦','Prepared Meals':'🍛','Beverages':'☕'}[type] || '🍽️';
+  return {'Bakery':'🥖','Produce':'🥦','Veg Meals':'🥗','Non-Veg Meals':'🍗','Prepared Meals':'🍛','Beverages':'☕'}[type] || '🍽️';
 }
 
 function renderLivePickups() {

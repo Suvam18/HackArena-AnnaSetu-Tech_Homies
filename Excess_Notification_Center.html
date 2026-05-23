@@ -210,12 +210,35 @@
             <label class="food-type-card flex flex-col items-center p-4 border-2 border-stone-100 dark:border-white/5 rounded-xl cursor-pointer hover:bg-emerald-50/50 dark:hover:bg-white/5 transition-all group has-[:checked]:border-[#4a7c59] has-[:checked]:bg-emerald-50 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500/10">
               <input class="sr-only" name="food_type" type="radio" value="Prepared Meals"/>
               <span class="material-symbols-outlined text-stone-400 group-hover:text-[#4a7c59] dark:group-hover:text-emerald-400 text-3xl mb-1" style="font-variation-settings:'FILL' 1;">restaurant</span>
-              <span class="font-bold text-xs text-stone-600 dark:text-stone-300 group-hover:text-[#4a7c59] dark:group-hover:text-emerald-400">Prepared</span>
+              <span class="font-bold text-xs text-stone-600 dark:text-stone-300 group-hover:text-[#4a7c59] dark:group-hover:text-emerald-400">Prepared Meals</span>
             </label>
             <label class="food-type-card flex flex-col items-center p-4 border-2 border-stone-100 dark:border-white/5 rounded-xl cursor-pointer hover:bg-emerald-50/50 dark:hover:bg-white/5 transition-all group has-[:checked]:border-[#4a7c59] has-[:checked]:bg-emerald-50 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500/10">
               <input class="sr-only" name="food_type" type="radio" value="Beverages"/>
               <span class="material-symbols-outlined text-stone-400 group-hover:text-[#4a7c59] dark:group-hover:text-emerald-400 text-3xl mb-1" style="font-variation-settings:'FILL' 1;">local_cafe</span>
               <span class="font-bold text-xs text-stone-600 dark:text-stone-300 group-hover:text-[#4a7c59] dark:group-hover:text-emerald-400">Beverages</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Dietary Preference (Veg / Non-Veg) -->
+        <div>
+          <label class="block text-sm font-bold text-stone-600 dark:text-stone-400 mb-3">🌱 Dietary Preference</label>
+          <div class="grid grid-cols-2 gap-4 max-w-md">
+            <label class="flex items-center justify-center gap-3 p-4 border-2 border-stone-100 dark:border-white/5 rounded-xl cursor-pointer hover:bg-emerald-50/50 dark:hover:bg-white/5 transition-all group has-[:checked]:border-[#10b981] has-[:checked]:bg-emerald-50 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500/10">
+              <input class="sr-only" name="dietary_type" type="radio" value="Veg" checked/>
+              <span class="text-2xl group-hover:scale-110 transition-transform">🟢</span>
+              <div class="text-left">
+                <span class="block font-bold text-sm text-stone-800 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Veg Only</span>
+                <span class="block text-[10px] text-stone-400 dark:text-stone-500">Plant-based & vegetarian</span>
+              </div>
+            </label>
+            <label class="flex items-center justify-center gap-3 p-4 border-2 border-stone-100 dark:border-white/5 rounded-xl cursor-pointer hover:bg-red-50/50 dark:hover:bg-white/5 transition-all group has-[:checked]:border-red-500 has-[:checked]:bg-red-50 dark:has-[:checked]:border-red-500 dark:has-[:checked]:bg-red-500/10">
+              <input class="sr-only" name="dietary_type" type="radio" value="Non-Veg"/>
+              <span class="text-2xl group-hover:scale-110 transition-transform">🔴</span>
+              <div class="text-left">
+                <span class="block font-bold text-sm text-stone-800 dark:text-white group-hover:text-red-500 dark:group-hover:text-red-400">Non-Veg</span>
+                <span class="block text-[10px] text-stone-400 dark:text-stone-500">Contains meat, egg, or fish</span>
+              </div>
             </label>
           </div>
         </div>
@@ -497,6 +520,7 @@ function applyPrediction() {
 // ═══════════════════════════════════════════
 function submitSurplus() {
   const foodType = document.querySelector('input[name="food_type"]:checked')?.value || 'Bakery';
+  const dietaryType = document.querySelector('input[name="dietary_type"]:checked')?.value || 'Veg';
   const qty = parseInt(document.getElementById('quantity').value) || 1;
   const packaging = document.getElementById('packaging').value;
   const pickupFrom = document.getElementById('pickup-from').value;
@@ -518,14 +542,14 @@ function submitSurplus() {
     let entries = getSurplusEntries();
     const idx = entries.findIndex(e => e.id === editingId);
     if (idx !== -1) {
-      entries[idx] = { ...entries[idx], foodType, qty, packaging, pickupFrom, pickupTo, expiry, notes, urgency: urgency.key };
+      entries[idx] = { ...entries[idx], foodType, dietaryType, qty, packaging, pickupFrom, pickupTo, expiry, notes, urgency: urgency.key };
       saveSurplusEntries(entries);
       
       // Update linked pickup
       const pickups = getPickups();
       const pIdx = pickups.findIndex(p => p.surplusId === editingId);
       if (pIdx !== -1) {
-        pickups[pIdx] = { ...pickups[pIdx], foodType, qty, packaging, pickupFrom, pickupTo, expiry, urgency: urgency.key };
+        pickups[pIdx] = { ...pickups[pIdx], foodType, dietaryType, qty, packaging, pickupFrom, pickupTo, expiry, urgency: urgency.key };
         savePickups(pickups);
       }
       showToast('Entry updated successfully! partners notified.');
@@ -536,7 +560,7 @@ function submitSurplus() {
     const surplusId = Date.now();
     const entry = {
       id: surplusId,
-      foodType, qty, packaging, pickupFrom, pickupTo, expiry, notes,
+      foodType, dietaryType, qty, packaging, pickupFrom, pickupTo, expiry, notes,
       urgency: urgency.key || 'normal',
       createdAt: new Date().toISOString(),
       status: 'active'
@@ -550,7 +574,7 @@ function submitSurplus() {
     const pickupRec = {
       id: 'pu-' + surplusId,
       surplusId,
-      foodType, qty, packaging, pickupFrom, pickupTo,
+      foodType, dietaryType, qty, packaging, pickupFrom, pickupTo,
       expiry, urgency: urgency.key || 'normal',
       locationId: null, locationName: null, accessPoint: null,
       volunteerName: null, volunteerETA: null, ngo: null,
@@ -614,6 +638,7 @@ function renderCards() {
           <div class="flex items-center gap-2 mb-1">
             <span class="text-lg">${getFoodEmoji(entry.foodType)}</span>
             <h4 class="font-bold text-stone-800 dark:text-white uppercase tracking-tight text-sm">${entry.foodType}</h4>
+            <span class="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-md ${entry.dietaryType === 'Non-Veg' ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30' : 'bg-green-50 text-green-700 border border-green-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30'}">${entry.dietaryType || 'Veg'}</span>
           </div>
           <p class="text-xs text-stone-500 dark:text-stone-400">${new Date(entry.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} · ${new Date(entry.createdAt).toLocaleDateString()}</p>
         </div>
@@ -661,7 +686,7 @@ function renderCards() {
 }
 
 function getFoodEmoji(type) {
-  const map = { 'Bakery':'🥖', 'Produce':'🥦', 'Prepared Meals':'🍛', 'Beverages':'☕' };
+  const map = { 'Bakery':'🥖', 'Produce':'🥦', 'Veg Meals':'🥗', 'Non-Veg Meals':'🍗', 'Prepared Meals':'🍛', 'Beverages':'☕' };
   return map[type] || '🍽️';
 }
 
@@ -751,6 +776,10 @@ function editEntry(id) {
   
   // Fill form
   document.querySelector(`input[name="food_type"][value="${entry.foodType}"]`).checked = true;
+  const dietVal = entry.dietaryType || 'Veg';
+  const dietEl = document.querySelector(`input[name="dietary_type"][value="${dietVal}"]`);
+  if (dietEl) dietEl.checked = true;
+  
   document.getElementById('quantity').value = entry.qty;
   document.getElementById('packaging').value = entry.packaging;
   document.getElementById('pickup-from').value = entry.pickupFrom;
@@ -773,6 +802,8 @@ function cancelEdit() {
   editingId = null;
   document.getElementById('surplus-form').reset();
   document.getElementById('quantity').value = 10;
+  const vegRadio = document.querySelector('input[name="dietary_type"][value="Veg"]');
+  if (vegRadio) vegRadio.checked = true;
   document.getElementById('broadcast-text').textContent = 'Broadcast to Rescue Network';
   document.getElementById('broadcast-icon').textContent = 'send';
   document.getElementById('btn-cancel-edit').classList.add('hidden');
